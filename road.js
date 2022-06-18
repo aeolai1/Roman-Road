@@ -1,10 +1,12 @@
- class Kerb {
-    constructor(startX, startY, endX, endY) {
-        this.a = createVector(startX, startY)
-        this.b = createVector(endX, endY)
-    }
-      show() {
-        stroke(0);
-        line(this.a.x, this.a.y, this.b.x, this.b.y);
-      }
+// A boundary is a line representing one edge (kerb) of a road
+class Boundary {
+  constructor(x1, y1, x2, y2) {
+      this.a = createVector(x1, y1);
+      this.b = createVector(x2, y2);
+  }
+
+  show() {
+      stroke(255);
+      line(this.a.x, this.a.y, this.b.x, this.b.y);
+  }
 }
