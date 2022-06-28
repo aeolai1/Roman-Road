@@ -6,7 +6,7 @@ class Sensor {
         this.direction = p5.Vector.fromAngle(angle);
     }
 
-    // sets the direction that the sensor beam fires in
+    // Sets the direction that the sensor beam fires in
     direction(x, y) {
         this.direction.x = x - this.pos.x;
         this.direction.y = y - this.pos.y;
@@ -14,16 +14,16 @@ class Sensor {
     }
 
     show() {
-        stroke(255);
-        push();
-        translate(this.position.x, this.position.y);
-        line(0, 0, this.direction.x * 10, this.direction.y * 10);
-        pop();
+            stroke(255, 100);
+            push();
+            translate(this.position.x, this.position.y);
+            line(0, 0, this.direction.x * 10, this.direction.y * 10);
+            pop();
     }
 
+    // Detect the intersection of the sensor beam and the boundary line
+    // ref https://en.wikipedia.org/wiki/Line–line_intersection
     detect(boundary) {
-        // detect the intersection of the sensor beam and the boundary line
-        // ref https://en.wikipedia.org/wiki/Line–line_intersection
         const x1 = boundary.a.x;
         const y1 = boundary.a.y;
         const x2 = boundary.b.x;
@@ -34,27 +34,27 @@ class Sensor {
         const x4 = this.position.x + this.direction.x;
         const y4 = this.position.y + this.direction.y;
 
-        // calculate the denominator
+        // Calculate the denominator
         const denominator = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
         
-        // deals with the denominator being zero, which happens if the sensor beam and boundary are perfectly parallel
+        // Deals with the denominator being zero, which happens if the sensor beam and boundary are perfectly parallel
         if (denominator == 0) {
             return;
         }
 
-        // calculate t and u
+        // Calculate t and u
         const t = ((x1 - x3) * (y3 - y4) - (y1 - y3) * (x3 - x4)) / denominator;
         const u = -((x1 - x2) * (y1 - y3) - (y1 - y2) * (x1 - x3)) / denominator;
 
-        // use u&t to detect if there is an intersection
+        // Use t & u to detect if there is an intersection
         if (t > 0 && t < 1 && u > 0) {
-            //if the sensor beam intersects a boundary, return the co-ords of the intersect
+            // If the sensor beam intersects a boundary, return the co-ords of the intersect
             const intersect = createVector();
             intersect.x = x1 + t * (x2 - x1);
             intersect.y = y1 + t * (y2 - y1);
             return intersect;
         } else {
-            // no intersection
+            // No intersection
             return;
         }
         }
