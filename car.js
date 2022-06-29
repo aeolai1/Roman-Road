@@ -7,8 +7,8 @@ class Car {
         this.dead = false; // Indicates that the car has crashed
         this.finished = false // Indicates the car has successfully reached the end point
         this.taskFitness = 0;
+        this.timer = 0; // the number of cycles it takes to complete the track (or die)
         this.ethicalFitness = 0;
-        this.timer = 0;
         this.velocity = createVector();
         this.acceleration = createVector();
 
@@ -53,7 +53,7 @@ class Car {
             this.velocity.add(this.acceleration);
             this.velocity.limit(MAX_SPEED)
 
-            //kill the car if it exceeds lifespan
+            //kill the car if it exceeds maximum allowed lifespan
             this.acceleration.set(0,0);
             this.timer++;
             if (this.timer > MAX_LIFESPAN) {

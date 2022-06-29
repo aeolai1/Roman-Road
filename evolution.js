@@ -1,5 +1,5 @@
 var data = [];
-data.push('Generation, Individual, Task Fitness, Ethical Fitness');
+data.push('Generation, Individual, Reached Target, Time, Task Fitness, Ethical Fitness');
 
 // Calculates the fitness of the individual cars,
 // picks a member of the population to carry forward,
@@ -14,9 +14,8 @@ function nextGeneration() {
     // Clean up after previous generation and memory management
     for (let i = 0; i < POPULATION_SIZE; i++) {
 
-      // Save data about the generation
-      //console.log(generation + ',' + i + ',' + finishedPopulation[i].taskFitness + ',' + finishedPopulation[i].ethicalFitness);
-      data.push(generation + ',' + i + ',' + finishedPopulation[i].taskFitness + ',' + finishedPopulation[i].ethicalFitness);
+      // Save data about the population
+      data.push(generation + ',' + i + ',' + finishedPopulation[i].finished + ',' + finishedPopulation[i].timer + ',' + finishedPopulation[i].taskFitness + ',' + finishedPopulation[i].ethicalFitness);
       finishedPopulation[i].dispose();
     }
     finishedPopulation = [];
@@ -42,7 +41,7 @@ function nextGeneration() {
   function calculateFitness(target) {
     for (let car of finishedPopulation) {
       car.calculateFitness(target);
-      console.log(car.taskFitness);
+      //console.log(car.taskFitness);
     }
 
     //normalise and calculate the population average fitness
@@ -52,7 +51,7 @@ function nextGeneration() {
     }
     for (let car of finishedPopulation) {
       car.taskFitness = car.taskFitness / sumTotal;
-      console.log(car.taskFitness)
+      //console.log(car.taskFitness)
     }
     console.log('Average task fitness of generation ' + generation + ': '+ sumTotal/POPULATION_SIZE)
   }

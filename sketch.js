@@ -1,8 +1,13 @@
 let alivePopulation = [];
 let finishedPopulation = [];
+
 let displaySelector;
+let ethicalModeSelector;
 let speedSlider;
+
+let destination;
 let generation = 0;
+var ethicalMode;
 
 function setup() {
     tf.setBackend('cpu');
@@ -14,6 +19,10 @@ function setup() {
     else if(MAP=='B') {
         mapB();
     }
+    if (DESTINATION_X) {
+        destination = createVector(DESTINATION_X,DESTINATION_Y);
+    }
+
     createCanvas(MAP_SIZE_X, MAP_SIZE_Y)
 
     // Create the population of cars
@@ -29,13 +38,20 @@ function setup() {
     displaySelector.style('width', '460px');
     displaySelector.style('font-family', 'sans-serif');
 
+    // Selector to enable ethical mode
+    ethicalModeSelector = createCheckbox(" Ethical mode");
+    ethicalModeSelector.position(30, MAP_SIZE_Y-50);
+    ethicalModeSelector.mousePressed(ethicalMode);
+    ethicalModeSelector.style('font-family', 'sans-serif');
+    ethicalModeSelector.style('color', 'white');
+
     // Slider to control the speed of the scenaro
     speedSlider = createSlider(0, 10, 2);
     speedSlider.position(150, MAP_SIZE_Y-50);
 
     // Button to save out data
     saveDataBtn = createButton("Save Data");
-    saveDataBtn.position(30, MAP_SIZE_Y-50);
+    saveDataBtn.position(425, MAP_SIZE_Y-50);
     saveDataBtn.mousePressed(saveData);
 
     textAlign(CENTER);
@@ -48,7 +64,7 @@ function draw() {
     noStroke();
     text('Generation ' + generation, 600, MAP_SIZE_Y-50);
     text('Population size ' + alivePopulation.length, 600, MAP_SIZE_Y-25);
-    text('scenaro speed', speedSlider.x + speedSlider.width + 60, speedSlider.y);
+    text('Scenaro speed', speedSlider.x + speedSlider.width + 60, speedSlider.y);
 
     // Draw map
     for (let road of roads) {
@@ -75,7 +91,6 @@ function draw() {
     start = createVector(START_X, START_Y);
     if (DESTINATION_X) {
         ellipse(DESTINATION_X, DESTINATION_Y, 10);
-        end = createVector(DESTINATION_X, DESTINATION_Y);
     }
 
     let showAllCars = displaySelector.value();
@@ -89,6 +104,7 @@ function draw() {
             car.fireSensorBeam(boundaries);
             car.outOfBounds();
             car.update();
+            car.check(destination);
             if (showAllCars) {
 
                 car.show();
@@ -113,7 +129,6 @@ function draw() {
         {
             nextGeneration();
             generation++;
-            console.log('Start  generation ' + generation);
         }
   }
 }
@@ -121,6 +136,18 @@ function draw() {
 function saveData() {
     save(data, "cars_data.csv");
   }
+
+function ethicalMode() {
+    if (ethicalModeSelector.checked()) {
+        ethicalMode = false;
+        console.log('Ethical mode turned off');
+    }
+    else {
+        ethicalMode = true;
+        console.log('Ethical mode turned on');
+    }
+
+}
 
 
 
