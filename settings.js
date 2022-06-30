@@ -5,7 +5,7 @@ MUTATION_RATE = 0.01;
 // Car settings
 const MAX_STEERING = 0.5;
 const MAX_SPEED = 4;
-const MAX_LIFESPAN = 1000;
+const MAX_LIFESPAN = 500;
 
 // Car sensor settings
 const ANGLE_BETWEEN_SENSORS = 10;

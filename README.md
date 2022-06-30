@@ -10,7 +10,7 @@ In the scenaro, an AI has the opportunity to "cheat", i.e. to disregard ethical 
 4. The mechanisms for embedding ethical or social norms into the pursuit of objectives, either directly (e.g., what are the minimal necessary objectives that need to be incorporated) or indirectly (e.g., from being influenced from AI’s observation of human behaviour or AI being rated by human observers); 
 5. How individual users ethical or social perspectives can be used to personalise the behaviour of the algorithm.
 
-## Components
+## Components
  - p5.js is used for the drawing and animations
  - tensorflow.js is used for the neural networks
  - chart.js is used for the charts
@@ -18,7 +18,7 @@ In the scenaro, an AI has the opportunity to "cheat", i.e. to disregard ethical 
 
 ## To Do
  - [ ] Give cars ability to vary speeds individually
- - [ ] Add speed of completion to the task fitness calculation
+ - [x] Add speed of completion to the task fitness calculation
  - [ ] Have each car evolve in seperate environments (grid)
  - [ ] Detect colisions between vehicles
  - [ ] Create ethical fitness function
@@ -27,10 +27,10 @@ In the scenaro, an AI has the opportunity to "cheat", i.e. to disregard ethical 
  - [ ] Try adding mutation of the topology of the networks
 
 ## Colaborators
-Mr. Paul Murphy (Cardiff University)
-Prof. Roger Whitaker (Cardiff University)
-Dr Liam Turner  (Cardiff University)
-Prof. Alun Preece  (Cardiff University)
+- Mr. Paul Murphy (Cardiff University)
+- Prof. Roger Whitaker (Cardiff University)
+- Dr Liam Turner  (Cardiff University)
+- Prof. Alun Preece  (Cardiff University)
 
 ## References
  - Neuroevolution steering vehicles, Dan Shiffman, https://www.youtube.com/watch?v=mXDrH0wStHs&t=11127s

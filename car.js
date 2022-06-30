@@ -114,11 +114,14 @@ class Car {
         this.applyForce(steering);
     }
 
-    // Calculates fitness based on distance to the destination
     calculateFitness(target) {
         if (this.finished) {
-            this.taskFitness = 1;
+            // For cars that complete the track use time taken
+            // to calculate fitness
+            this.taskFitness = MAX_LIFESPAN-this.timer;
         } else {
+            // For cars that don't finish the track, calculate
+            /// fitness based on distance away from the destination
             const d = p5.Vector.dist(this.position, target);
             this.taskFitness = constrain(1 / d, 0, 1);
         }
