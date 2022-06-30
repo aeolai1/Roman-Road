@@ -11,6 +11,7 @@ class Car {
         this.ethicalFitness = 0;
         this.velocity = createVector();
         this.acceleration = createVector();
+        this.highlighted = false;
 
         // Create a variable number of sensors that fire beams from the car at specified angles
         for (let angle = 0; angle < 360; angle += ANGLE_BETWEEN_SENSORS) {
@@ -100,7 +101,7 @@ class Car {
                 this.dead = true;
             }
 
-            if (closestBoundary && SHOW_SENSORS) {
+            if (closestBoundary && ((SHOW_SENSORS && showAllCars) || SHOW_SENSORS && this.highlighted)) {
                 line(this.position.x, this.position.y, closestBoundary.x, closestBoundary.y);
             }
         }
@@ -140,6 +141,7 @@ class Car {
     // Changes the drawing style of a car
     // used to highlight the best performing individual
     highlight() {
+        this.highlighted = true;
         push();
         translate(this.position.x, this.position.y);
         const heading = this.velocity.heading();

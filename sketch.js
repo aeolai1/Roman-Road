@@ -1,13 +1,15 @@
 let alivePopulation = [];
 let finishedPopulation = [];
 
-let displaySelector;
+let populationDisplaySelector;
 let ethicalModeSelector;
 let speedSlider;
 
 let destination;
 let generation = 0;
 var ethicalMode;
+var showAllCars = true;
+var clock = 0;
 
 function setup() {
     tf.setBackend('cpu');
@@ -23,7 +25,8 @@ function setup() {
         destination = createVector(DESTINATION_X,DESTINATION_Y);
     }
 
-    createCanvas(MAP_SIZE_X, MAP_SIZE_Y)
+    var p5Canvas = createCanvas(MAP_SIZE_X, MAP_SIZE_Y)
+    p5Canvas.parent("p5");
 
     // Create the population of cars
     for (let i = 0; i < POPULATION_SIZE; i++) {
@@ -31,27 +34,34 @@ function setup() {
     }
 
     // Selector to display all/select cars
-    displaySelector = createRadio();
-    displaySelector.option('true', 'Show entire population');
-    displaySelector.option('', 'Show only the best individual');
-    displaySelector.selected('true');
-    displaySelector.style('width', '460px');
-    displaySelector.style('font-family', 'sans-serif');
+    populationDisplaySelector = createCheckbox(' Show entire population');
+    populationDisplaySelector.position(MAP_SIZE_X-200, 75);
+    populationDisplaySelector.checked('true');
+    populationDisplaySelector.mousePressed(togglePopulationDisplay);
+    populationDisplaySelector.style('font-family', 'sans-serif');
+    populationDisplaySelector.style('color', 'white');
 
     // Selector to enable ethical mode
     ethicalModeSelector = createCheckbox(" Ethical mode");
-    ethicalModeSelector.position(30, MAP_SIZE_Y-50);
-    ethicalModeSelector.mousePressed(ethicalMode);
+    ethicalModeSelector.position(MAP_SIZE_X-200, 100);
+    ethicalModeSelector.mousePressed(toggleEthicalMode);
     ethicalModeSelector.style('font-family', 'sans-serif');
     ethicalModeSelector.style('color', 'white');
 
+    // Selector to show sensor beams
+    sensorDisplaySelector = createCheckbox(" Show sensors");
+    sensorDisplaySelector.position(MAP_SIZE_X-200, 50);
+    sensorDisplaySelector.mousePressed(toggleSensorDisplay);
+    sensorDisplaySelector.style('font-family', 'sans-serif');
+    sensorDisplaySelector.style('color', 'white')
+
     // Slider to control the speed of the scenaro
     speedSlider = createSlider(0, 10, 2);
-    speedSlider.position(150, MAP_SIZE_Y-50);
+    speedSlider.position(50, MAP_SIZE_Y-50);
 
     // Button to save out data
     saveDataBtn = createButton("Save Data");
-    saveDataBtn.position(425, MAP_SIZE_Y-50);
+    saveDataBtn.position(MAP_SIZE_X-200, 155);
     saveDataBtn.mousePressed(saveData);
 
     textAlign(CENTER);
@@ -62,8 +72,9 @@ function draw() {
     fill(255);
     textSize(16);
     noStroke();
-    text('Generation ' + generation, 600, MAP_SIZE_Y-50);
-    text('Population size ' + alivePopulation.length, 600, MAP_SIZE_Y-25);
+    text('Generation ' + generation, MAP_SIZE_X-100, MAP_SIZE_Y-75);
+    text('Population size ' + alivePopulation.length, MAP_SIZE_X-100, MAP_SIZE_Y-50);
+    text('Timer ' + clock, MAP_SIZE_X-100, MAP_SIZE_Y-25);
     text('Scenaro speed', speedSlider.x + speedSlider.width + 60, speedSlider.y);
 
     // Draw map
@@ -93,8 +104,6 @@ function draw() {
         ellipse(DESTINATION_X, DESTINATION_Y, 10);
     }
 
-    let showAllCars = displaySelector.value();
-
     // Speed controller
     const cycles = speedSlider.value();
     for (let n = 0; n < cycles; n++) {
@@ -106,9 +115,8 @@ function draw() {
             car.update();
             car.check(destination);
             if (showAllCars) {
-
                 car.show();
-        }
+            }
 
             // Get the fittest one
             if (car.taskFitness > bestIndividual.taskFitness) {
@@ -125,19 +133,21 @@ function draw() {
             }
         }
 
-        if (alivePopulation.length == 0)
-        {
+        if (alivePopulation.length == 0) {
             nextGeneration();
             generation++;
+            chart.update();
+            clock = 0;
         }
-  }
+    }
+    clock++;
 }
 
 function saveData() {
     save(data, "cars_data.csv");
-  }
+}
 
-function ethicalMode() {
+function toggleEthicalMode() {
     if (ethicalModeSelector.checked()) {
         ethicalMode = false;
         console.log('Ethical mode turned off');
@@ -146,9 +156,22 @@ function ethicalMode() {
         ethicalMode = true;
         console.log('Ethical mode turned on');
     }
-
 }
 
+function togglePopulationDisplay() {
+    if (populationDisplaySelector.checked()) {
+        showAllCars = false;
+    }
+    else {
+        showAllCars = true;
+    }
+}
 
-
-
+function toggleSensorDisplay() {
+    if (sensorDisplaySelector.checked()) {
+        SHOW_SENSORS = false;
+    }
+    else {
+        SHOW_SENSORS = true;
+    }
+}

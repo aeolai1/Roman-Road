@@ -10,7 +10,7 @@ const MAX_LIFESPAN = 1000;
 // Car sensor settings
 const ANGLE_BETWEEN_SENSORS = 10;
 const SENSOR_DISTANCE = 100;
-const SHOW_SENSORS = false;
+var SHOW_SENSORS = false;
 
 // Road settings
 const MAP = 'B';
@@ -57,7 +57,7 @@ function mapA()
 
 function mapB()
 {
-    MAP_SIZE_X = 700;
+    MAP_SIZE_X = 900;
     MAP_SIZE_Y = 600;
     
     // Section 1
