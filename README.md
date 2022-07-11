@@ -17,7 +17,7 @@ In the scenaro, an AI has the opportunity to "cheat", i.e. to disregard ethical 
  - The genetic algorythm is currently coded as part of the solution but may switch to something else (e.g. NEAT)
 
 ## To Do
- - [ ] Give cars ability to vary speeds individually
+ - [x] Give cars ability to vary speeds individually
  - [x] Add speed of completion to the task fitness calculation
  - [ ] Have each car evolve in seperate environments (grid)
  - [ ] Detect colisions between vehicles

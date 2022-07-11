@@ -56,7 +56,7 @@ function setup() {
     sensorDisplaySelector.style('color', 'white')
 
     // Slider to control the speed of the scenaro
-    speedSlider = createSlider(0, 10, 2);
+    speedSlider = createSlider(0, 100, 2);
     speedSlider.position(50, MAP_SIZE_Y-50);
 
     // Button to save out data
@@ -72,9 +72,9 @@ function draw() {
     fill(255);
     textSize(16);
     noStroke();
-    text('Generation ' + generation, MAP_SIZE_X-100, MAP_SIZE_Y-75);
-    text('Population size ' + alivePopulation.length, MAP_SIZE_X-100, MAP_SIZE_Y-50);
-    text('Timer ' + clock, MAP_SIZE_X-100, MAP_SIZE_Y-25);
+    text('Generation ' + generation, MAP_SIZE_X-100, MAP_SIZE_Y-100);
+    text('Population size ' + alivePopulation.length, MAP_SIZE_X-100, MAP_SIZE_Y-75);
+    text('Timer ' + clock, MAP_SIZE_X-100, MAP_SIZE_Y-50);
     text('Scenaro speed', speedSlider.x + speedSlider.width + 60, speedSlider.y);
 
     // Draw map

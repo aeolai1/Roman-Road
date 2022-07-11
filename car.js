@@ -25,7 +25,7 @@ class Car {
         else {
             // Creates the neural nework with an input for each sensor beam,
             // a corrisponding number of hidden nodes, and 1 output (steering)
-            this.neuralNet = new NeuralNetwork(this.beams.length, this.beams.length, 1);
+            this.neuralNet = new NeuralNetwork(this.beams.length, this.beams.length, 2);
         }
     }
 
@@ -108,7 +108,7 @@ class Car {
         const output = this.neuralNet.predict(inputs);
         const angle = map(output[0], 0, 1, 0, TWO_PI);
         const steering = p5.Vector.fromAngle(angle);
-        steering.setMag(MAX_SPEED);
+        steering.setMag(output[1]);
         steering.sub(this.velocity);
         steering.limit(MAX_STEERING);
         this.applyForce(steering);
@@ -146,13 +146,22 @@ class Car {
     highlight() {
         this.highlighted = true;
         push();
-        translate(this.position.x, this.position.y);
-        const heading = this.velocity.heading();
-        rotate(heading);
-        stroke(255, 255, 255);
-        fill(170, 20, 60);
-        rectMode(CENTER);
-        rect(0, 0, 20, 10);
+            translate(this.position.x, this.position.y);
+            const heading = this.velocity.heading();
+            rotate(heading);
+            stroke(255, 255, 255);
+            fill(170, 20, 60);
+            rectMode(CENTER);
+            rect(0, 0, 20, 10);
         pop();
+
+        //display highlighted car's speed
+        push();
+            fill(170, 20, 60);
+            noStroke();
+            var speed = mag(this.velocity.x, this.velocity.y);  //convert x,y vector velocity to a magnitude (speed)
+            text('Current speed: ' + nf(speed, 2, 2), MAP_SIZE_X-100, MAP_SIZE_Y-25);
+        pop();
+        
       }
 }
