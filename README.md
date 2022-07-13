@@ -22,7 +22,7 @@ In the scenaro, an AI has the opportunity to "cheat", i.e. to disregard ethical 
  - [ ] Have each car evolve in seperate environments (grid)
  - [ ] Detect colisions between vehicles
  - [ ] Create ethical fitness function
- - [ ] Saving of the network model
+ - [x] Saving of the network model
  - [x] Graph the performance over time
  - [ ] Try adding mutation of the topology of the networks
 

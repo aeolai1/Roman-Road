@@ -57,5 +57,5 @@ class Sensor {
             // No intersection
             return;
         }
-        }
     }
+}

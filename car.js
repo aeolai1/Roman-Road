@@ -1,7 +1,7 @@
 // A car is an object capable of moving in any direction, with various speeds
 // that uses sensors to detect nearby objects and to navigate around them
 class Car {
-    constructor(parentNeuralNet) {
+    constructor(parentNeuralNet, modelToLoad) {
         this.position = createVector(START_X, START_Y); // Starting position of the car
         this.beams = []; // Array of sensor beams emitted from the car
         this.dead = false; // Indicates that the car has crashed
@@ -18,10 +18,15 @@ class Car {
             this.beams.push(new Sensor(this.position, radians(angle)));
         }
 
-        // If the car has a parent, use their neural net, otherwise create one from scratch
+        // If the car has a parent, use their neural net
         if (parentNeuralNet) {
             this.neuralNet = parentNeuralNet.copy();
         }
+        // If a model has been loaded from storage, use that
+        else if (modelToLoad) {
+            this.neuralNet = new NeuralNetwork(this.beams.length, this.beams.length, 2, modelToLoad);
+        }
+        // Create a NN from scratch
         else {
             // Creates the neural nework with an input for each sensor beam,
             // a corrisponding number of hidden nodes, and 1 output (steering)
@@ -162,6 +167,13 @@ class Car {
             var speed = mag(this.velocity.x, this.velocity.y);  //convert x,y vector velocity to a magnitude (speed)
             text('Current speed: ' + nf(speed, 2, 2), MAP_SIZE_X-100, MAP_SIZE_Y-25);
         pop();
-        
-      }
+    }
+
+    saveModel() {
+        this.neuralNet.saveModel();
+    }
+
+    loadModel() {
+        this.neuralNet.loadModel();
+    }
 }

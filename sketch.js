@@ -7,6 +7,8 @@ let speedSlider;
 
 let destination;
 let generation = 0;
+let bestIndividual;
+
 var ethicalMode;
 var showAllCars = true;
 var clock = 0;
@@ -64,6 +66,16 @@ function setup() {
     saveDataBtn.position(MAP_SIZE_X-200, 155);
     saveDataBtn.mousePressed(saveData);
 
+    // Button to save car
+    saveCarBtn = createButton("Save car (highlighted one)");
+    saveCarBtn.position(MAP_SIZE_X-200, 180);
+    saveCarBtn.mousePressed(saveCar);
+
+    // Button to load car
+    loadCarBtn = createButton("Add saved car");
+    loadCarBtn.position(MAP_SIZE_X-200, 205);
+    loadCarBtn.mousePressed(loadSavedCar);
+
     textAlign(CENTER);
 }
 
@@ -96,7 +108,7 @@ function draw() {
         boundary.show();
     }
 
-    let bestIndividual = alivePopulation[0]; // use previous generation's best as initial best
+    bestIndividual = alivePopulation[0]; // use previous generation's best as initial best
     
     ellipse(START_X, START_Y, 10);
     start = createVector(START_X, START_Y);
@@ -145,6 +157,27 @@ function draw() {
 
 function saveData() {
     save(data, "cars_data.csv");
+}
+
+function saveCar() {
+    bestIndividual.saveModel();
+}
+
+// Loads the saved Tensorflow model from browser storage and
+// adds it to the current population as a new car
+function loadSavedCar() {
+    (async ()=>{
+        try {
+            const loadResult = await tf.loadLayersModel('indexeddb://car-model');
+            alivePopulation.push(new Car(false, loadResult));
+            alert('Successfully added car from model');
+            console.log('Successfully loaded model');
+        }
+        catch(error) {
+            alert('An error occured, model not loaded: ' + error);
+            console.log('Error saving loading the model from browser storage: ' + error);
+        }
+    })()
 }
 
 function toggleEthicalMode() {

@@ -96,5 +96,27 @@ class NeuralNetwork {
       model.add(output);
       return model;
     }
-  }
-  
+
+    // Saves the Tensorflow model to the browser's storage for later use
+    saveModel() {
+      (async ()=>{
+        try {
+          const saveResult = await this.model.save('indexeddb://car-model');
+          alert('Car saved to browser storage');
+          console.log('Car saved to browser');
+        }
+        catch(error) {
+          alert('An error occured, car not saved.');
+          console.log('An error occured saving the model to browser storage: ' + error);
+        }
+      })()
+    }
+
+    // Loads a model from browser storage
+    loadModel() {
+      (async ()=>{
+        const loadResult = await tf.loadLayersModel('indexeddb://car-model');
+        this.model = loadResult;
+    })()
+    }
+}
