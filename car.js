@@ -36,14 +36,14 @@ class Car {
 
     show() {
         push();
-        translate(this.position.x, this.position.y);
-        const heading = this.velocity.heading();
-        rotate(heading);
+            translate(this.position.x, this.position.y);
+            const heading = this.velocity.heading();
+            rotate(heading);
 
-        // car visuals 
-        fill(255, 100);
-        rectMode(CENTER);
-        rect(0, 0, 20, 10);
+            // car visuals 
+            fill(255, 100);
+            rectMode(CENTER);
+            rect(0, 0, 20, 10);
         pop();
     }
 
@@ -71,7 +71,7 @@ class Car {
     // Checks whether the car has reached the destination
     check(target) {
         const distance = p5.Vector.dist(this.position, target);
-        if (distance < 10) {
+        if (distance < 50) {
             this.finished = true;
         }
     }
@@ -146,6 +146,11 @@ class Car {
             this.dead = true;
     }
 
+    //Kills the car
+    kill() {
+        this.dead = true;
+    }
+
     // Changes the drawing style of a car
     // used to highlight the best performing individual
     highlight() {
@@ -165,7 +170,7 @@ class Car {
             fill(170, 20, 60);
             noStroke();
             var speed = mag(this.velocity.x, this.velocity.y);  //convert x,y vector velocity to a magnitude (speed)
-            text('Current speed: ' + nf(speed, 2, 2), MAP_SIZE_X-100, MAP_SIZE_Y-25);
+            text('Current speed: ' + nf((speed*10), 2, 1), MAP_SIZE_X-100, MAP_SIZE_Y-25);
         pop();
     }
 

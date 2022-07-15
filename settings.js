@@ -1,6 +1,6 @@
 // Evolution settings
 POPULATION_SIZE = 100;
-MUTATION_RATE = 0.01;
+MUTATION_RATE = 0.02;
 
 // Car settings
 const MAX_STEERING = 0.5;
@@ -13,16 +13,50 @@ const SENSOR_DISTANCE = 100;
 var SHOW_SENSORS = false;
 
 // Road settings
-const MAP = 'B';
 var START_X, START_Y;
 var DESTINATION_X, DESTINATION_Y;
 var MAP_SIZE_X, MAP_SIZE_Y;
+var finishLine;
 
 // Roads
 let boundaries = [];
 let roads =[];
 
 function mapA()
+{
+    MAP_SIZE_X = 950;
+    MAP_SIZE_Y = 600;
+    
+    // Section 1
+    boundaries.push(new Boundary(50, 500, 50, 200));
+    boundaries.push(new Boundary(100, 500, 100, 250));
+    roads.push([50, 200, 50, 300, 0]);
+
+    // Section 2
+    boundaries.push(new Boundary(50, 200, 150, 50));
+    boundaries.push(new Boundary(100, 250, 200, 100));
+    roads.push([50, 200, 100, 250, 200, 100, 150, 50]);
+
+    // Section 3
+    boundaries.push(new Boundary(150, 50, 600, 50));
+    boundaries.push(new Boundary(200, 100, 600, 100));
+    roads.push([150, 50, 450, 50, 0]);
+
+    // Ends
+    boundaries.push(new Boundary(600, 50, 600, 100));
+    boundaries.push(new Boundary(50, 500, 100, 500));
+
+    START_X = 75;
+    START_Y = 490;
+
+    DESTINATION_X = 550;
+    DESTINATION_Y = 75;
+
+    finishLine = new Boundary(550, 50, 550, 100);
+    finishLine.show();
+}
+
+function mapB()
 {
     MAP_SIZE_X = 1600;
     MAP_SIZE_Y = 1000;
@@ -53,35 +87,8 @@ function mapA()
 
     DESTINATION_X = 1350;
     DESTINATION_Y = 400;
+
+    finishLine = new Boundary(1300, 400, 1400, 400);
+    finishLine.show();
 }
 
-function mapB()
-{
-    MAP_SIZE_X = 900;
-    MAP_SIZE_Y = 600;
-    
-    // Section 1
-    boundaries.push(new Boundary(50, 500, 50, 200));
-    boundaries.push(new Boundary(100, 500, 100, 250));
-    roads.push([50, 200, 50, 300, 0]);
-
-    // Section 2
-    boundaries.push(new Boundary(50, 200, 150, 50));
-    boundaries.push(new Boundary(100, 250, 200, 100));
-    roads.push([50, 200, 100, 250, 200, 100, 150, 50]);
-
-    // Section 3
-    boundaries.push(new Boundary(150, 50, 600, 50));
-    boundaries.push(new Boundary(200, 100, 600, 100));
-    roads.push([150, 50, 450, 50, 0]);
-
-    // Ends
-    boundaries.push(new Boundary(600, 50, 600, 100));
-    boundaries.push(new Boundary(50, 500, 100, 500));
-
-    START_X = 75;
-    START_Y = 490;
-
-    DESTINATION_X = 600;
-    DESTINATION_Y = 75;
-}

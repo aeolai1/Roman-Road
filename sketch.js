@@ -4,6 +4,7 @@ let finishedPopulation = [];
 let populationDisplaySelector;
 let ethicalModeSelector;
 let speedSlider;
+let mapSelector;
 
 let destination;
 let generation = 0;
@@ -16,24 +17,15 @@ var clock = 0;
 function setup() {
     tf.setBackend('cpu');
 
-    // Map selector
-    if(MAP=='A') {
-        mapA();
-    }
-    else if(MAP=='B') {
-        mapB();
-    }
-    if (DESTINATION_X) {
-        destination = createVector(DESTINATION_X,DESTINATION_Y);
-    }
-
-    var p5Canvas = createCanvas(MAP_SIZE_X, MAP_SIZE_Y)
+    var p5Canvas = createCanvas(1, 1)
     p5Canvas.parent("p5");
-
-    // Create the population of cars
-    for (let i = 0; i < POPULATION_SIZE; i++) {
-        alivePopulation[i] = new Car();
-    }
+    
+    // Position the dropdown menu
+    mapSelector = createSelect();
+    mapSelector.position(MAP_SIZE_X-200, 50);
+    mapSelector.option('A');
+    mapSelector.option('B');
+    mapSelector.changed(mapChanged);
 
     // Selector to display all/select cars
     populationDisplaySelector = createCheckbox(' Show entire population');
@@ -43,31 +35,31 @@ function setup() {
     populationDisplaySelector.style('font-family', 'sans-serif');
     populationDisplaySelector.style('color', 'white');
 
-    // Selector to enable ethical mode
-    ethicalModeSelector = createCheckbox(" Ethical mode");
-    ethicalModeSelector.position(MAP_SIZE_X-200, 100);
-    ethicalModeSelector.mousePressed(toggleEthicalMode);
-    ethicalModeSelector.style('font-family', 'sans-serif');
-    ethicalModeSelector.style('color', 'white');
-
     // Selector to show sensor beams
     sensorDisplaySelector = createCheckbox(" Show sensors");
-    sensorDisplaySelector.position(MAP_SIZE_X-200, 50);
+    sensorDisplaySelector.position(MAP_SIZE_X-200, 100);
     sensorDisplaySelector.mousePressed(toggleSensorDisplay);
     sensorDisplaySelector.style('font-family', 'sans-serif');
     sensorDisplaySelector.style('color', 'white')
+
+        // // Selector to enable ethical mode
+    // ethicalModeSelector = createCheckbox(" Ethical mode");
+    // ethicalModeSelector.position(MAP_SIZE_X-200, 125);
+    // ethicalModeSelector.mousePressed(toggleEthicalMode);
+    // ethicalModeSelector.style('font-family', 'sans-serif');
+    // ethicalModeSelector.style('color', 'white');
 
     // Slider to control the speed of the scenaro
     speedSlider = createSlider(0, 100, 2);
     speedSlider.position(50, MAP_SIZE_Y-50);
 
     // Button to save out data
-    saveDataBtn = createButton("Save Data");
+    saveDataBtn = createButton("Save data");
     saveDataBtn.position(MAP_SIZE_X-200, 155);
     saveDataBtn.mousePressed(saveData);
 
     // Button to save car
-    saveCarBtn = createButton("Save car (highlighted one)");
+    saveCarBtn = createButton("Save highlighted car");
     saveCarBtn.position(MAP_SIZE_X-200, 180);
     saveCarBtn.mousePressed(saveCar);
 
@@ -75,6 +67,18 @@ function setup() {
     loadCarBtn = createButton("Add saved car");
     loadCarBtn.position(MAP_SIZE_X-200, 205);
     loadCarBtn.mousePressed(loadSavedCar);
+
+    // Button to start the next generation
+    nextGenBtn = createButton("Next generation");
+    nextGenBtn.position(MAP_SIZE_X-200, 230);
+    nextGenBtn.mousePressed(endCurrentGeneration);
+
+    loadMap('A');
+
+    // Create the population of cars
+    for (let i = 0; i < POPULATION_SIZE; i++) {
+        alivePopulation[i] = new Car();
+    }
 
     textAlign(CENTER);
 }
@@ -92,20 +96,31 @@ function draw() {
     // Draw map
     for (let road of roads) {
         push();
-        fill(200);
-        noStroke();
-        if (road[4] > 0) {
-            quad(road[0], road[1], road[2], road[3], road[4], road[5], road[6], road[7])
-        }
-        else {
-            rect(road[0], road[1], road[2], road[3]);
-        }
+            fill(200);
+            noStroke();
+            if (road[4] > 0) {
+                quad(road[0], road[1], road[2], road[3], road[4], road[5], road[6], road[7])
+            }
+            else {
+                rect(road[0], road[1], road[2], road[3]);
+            }
         pop();
-
     }
     rectMode(CORNER);
     for (let boundary of boundaries) {
-        boundary.show();
+        push()
+            stroke(255);
+            boundary.show();
+        pop()
+    }
+
+    if(finishLine) {
+        push()
+            stroke('yellow');
+            fill(170, 20, 60);
+            strokeWeight(8); 
+            finishLine.show();
+        pop()
     }
 
     bestIndividual = alivePopulation[0]; // use previous generation's best as initial best
@@ -136,8 +151,6 @@ function draw() {
             }
         }
 
-        bestIndividual.highlight();
-
         for(let i = alivePopulation.length -1; i >= 0; i--) {
             const car = alivePopulation[i];
             if (car.dead || car.finished) {
@@ -150,6 +163,10 @@ function draw() {
             generation++;
             chart.update();
             clock = 0;
+        }
+
+        if(alivePopulation.length > 0) {
+            bestIndividual.highlight();
         }
     }
     clock++;
@@ -207,4 +224,47 @@ function toggleSensorDisplay() {
     else {
         SHOW_SENSORS = true;
     }
+}
+
+// Ends the current generation by killing all alive cars
+function endCurrentGeneration() {
+    for(let i = alivePopulation.length -1; i >= 0; i--) {
+        const car = alivePopulation[i];
+        car.kill();
+    }
+}
+
+function mapChanged() {
+    loadMap(mapSelector.value());
+}
+
+function loadMap(mapID) {
+    console.log('Loading map ' + mapID)
+
+    // Clear exisiting map
+    boundaries.length = 0;
+    roads.length = 0;
+
+    // Load new map
+    if(mapID=='A') {
+        mapA();
+    }
+    else if(mapID=='B') {
+        mapB();
+    }
+    resizeCanvas(MAP_SIZE_X, MAP_SIZE_Y);
+    if (DESTINATION_X) {
+        destination = createVector(DESTINATION_X,DESTINATION_Y);
+    }
+
+    // Reposition UI controls
+    mapSelector.position(MAP_SIZE_X-200, 50);
+    populationDisplaySelector.position(MAP_SIZE_X-200, 75);
+    sensorDisplaySelector.position(MAP_SIZE_X-200, 100);
+    // ethicalModeSelector.position(MAP_SIZE_X-200, 125);
+    speedSlider.position(50, MAP_SIZE_Y-50);
+    saveDataBtn.position(MAP_SIZE_X-200, 155);
+    saveCarBtn.position(MAP_SIZE_X-200, 180);
+    loadCarBtn.position(MAP_SIZE_X-200, 205);
+    nextGenBtn.position(MAP_SIZE_X-200, 230);
 }
