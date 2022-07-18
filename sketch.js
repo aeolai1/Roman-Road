@@ -12,7 +12,7 @@ let generation = 0;
 let bestIndividual;
 
 var ethicalMode;
-var autoMapChanging = false;
+var autoMapChanging = true;
 var showAllCars = true;
 var clock = 0;
 
