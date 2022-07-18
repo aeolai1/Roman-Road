@@ -96,6 +96,7 @@ function draw() {
     fill(255);
     textSize(16);
     noStroke();
+    text('Map: ', MAP_SIZE_X-185, 58);
     text('Generation ' + generation, MAP_SIZE_X-100, MAP_SIZE_Y-100);
     text('Population size ' + alivePopulation.length, MAP_SIZE_X-100, MAP_SIZE_Y-75);
     text('Timer ' + clock, MAP_SIZE_X-100, MAP_SIZE_Y-50);
@@ -269,16 +270,25 @@ function loadMap(mapID) {
     else if(mapID=='B') {
         mapB();
     }
+    else if(mapID=='C') {
+        mapC();
+    }
+    else if(mapID=='D') {
+        mapD();
+    }
+    else if(mapID=='E') {
+        mapE();
+    }
     resizeCanvas(MAP_SIZE_X, MAP_SIZE_Y);
     if (DESTINATION_X) {
         destination = createVector(DESTINATION_X,DESTINATION_Y);
     }
 
     // Reposition UI controls
-    mapSelector.position(MAP_SIZE_X-200, 50);
-    populationDisplaySelector.position(MAP_SIZE_X-200, 75);
-    sensorDisplaySelector.position(MAP_SIZE_X-200, 100);
-    autoMapSelector.position(MAP_SIZE_X-200, 125);
+    mapSelector.position(MAP_SIZE_X-160, 50);
+    autoMapSelector.position(MAP_SIZE_X-200, 75);
+    populationDisplaySelector.position(MAP_SIZE_X-200, 100);
+    sensorDisplaySelector.position(MAP_SIZE_X-200, 125);
     // ethicalModeSelector.position(MAP_SIZE_X-200, 150);
     speedSlider.position(50, MAP_SIZE_Y-50);
     saveDataBtn.position(MAP_SIZE_X-200, 180);
@@ -287,7 +297,7 @@ function loadMap(mapID) {
     nextGenBtn.position(MAP_SIZE_X-200, 255);
 }
 function autoChangeMap() {
-    if(autoChangeMap) {
+    if(autoMapChanging) {
         randomMap = maps[Math.floor(Math.random() * maps.length)];
         loadMap(randomMap);
         mapSelector.selected(randomMap);

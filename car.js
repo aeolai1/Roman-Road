@@ -160,7 +160,7 @@ class Car {
             const heading = this.velocity.heading();
             rotate(heading);
             stroke(255, 255, 255);
-            fill(170, 20, 60);
+            fill(170, 20, 60, 200);
             rectMode(CENTER);
             rect(0, 0, 20, 10);
         pop();

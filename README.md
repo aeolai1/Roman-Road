@@ -19,6 +19,7 @@ In the scenaro, an AI has the opportunity to "cheat", i.e. to disregard ethical 
 ## To Do
  - [x] Give cars ability to vary speeds individually
  - [x] Add speed of completion to the task fitness calculation
+ - [x] Change the map with each generation to prevent overfitting
  - [ ] Have each car evolve in seperate environments (grid)
  - [ ] Detect colisions between vehicles
  - [ ] Create ethical fitness function
