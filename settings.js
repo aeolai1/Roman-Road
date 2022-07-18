@@ -8,7 +8,7 @@ const MAX_SPEED = 10;
 const MAX_LIFESPAN = 10000;
 
 // Car sensor settings
-const ANGLE_BETWEEN_SENSORS = 10;
+const ANGLE_BETWEEN_SENSORS = 20;
 const SENSOR_DISTANCE = 100;
 var SHOW_SENSORS = false;
 
@@ -21,6 +21,8 @@ var finishLine;
 // Roads
 let boundaries = [];
 let roads =[];
+
+let maps = ['A','B'];
 
 function mapA()
 {

@@ -1,6 +1,7 @@
 let alivePopulation = [];
 let finishedPopulation = [];
 
+let autoMapSelector;
 let populationDisplaySelector;
 let ethicalModeSelector;
 let speedSlider;
@@ -11,6 +12,7 @@ let generation = 0;
 let bestIndividual;
 
 var ethicalMode;
+var autoMapChanging = false;
 var showAllCars = true;
 var clock = 0;
 
@@ -22,32 +24,38 @@ function setup() {
     
     // Position the dropdown menu
     mapSelector = createSelect();
-    mapSelector.position(MAP_SIZE_X-200, 50);
-    mapSelector.option('A');
-    mapSelector.option('B');
+    for (i=0; i < maps.length; i++) {
+        mapSelector.option(maps[i]);
+    }
     mapSelector.changed(mapChanged);
+    mapSelector.disable();
 
     // Selector to display all/select cars
     populationDisplaySelector = createCheckbox(' Show entire population');
-    populationDisplaySelector.position(MAP_SIZE_X-200, 75);
     populationDisplaySelector.checked('true');
     populationDisplaySelector.mousePressed(togglePopulationDisplay);
     populationDisplaySelector.style('font-family', 'sans-serif');
     populationDisplaySelector.style('color', 'white');
 
     // Selector to show sensor beams
-    sensorDisplaySelector = createCheckbox(" Show sensors");
-    sensorDisplaySelector.position(MAP_SIZE_X-200, 100);
+    sensorDisplaySelector = createCheckbox(' Show sensors');
     sensorDisplaySelector.mousePressed(toggleSensorDisplay);
     sensorDisplaySelector.style('font-family', 'sans-serif');
-    sensorDisplaySelector.style('color', 'white')
+    sensorDisplaySelector.style('color', 'white');
 
-    // // Selector to enable ethical mode
-    // ethicalModeSelector = createCheckbox(" Ethical mode");
-    // ethicalModeSelector.position(MAP_SIZE_X-200, 125);
-    // ethicalModeSelector.mousePressed(toggleEthicalMode);
-    // ethicalModeSelector.style('font-family', 'sans-serif');
-    // ethicalModeSelector.style('color', 'white');
+    // Selector to enable auto map changing
+    autoMapSelector = createCheckbox(' Auto change map');
+    autoMapSelector.checked('true');
+    autoMapSelector.mousePressed(toggleAutoMap);
+    autoMapSelector.style('font-family', 'sans-serif');
+    autoMapSelector.style('color', 'white');
+
+    // Selector to enable ethical mode
+    ethicalModeSelector = createCheckbox(" Ethical mode");
+    //ethicalModeSelector.position(MAP_SIZE_X-200, 150);
+    ethicalModeSelector.mousePressed(toggleEthicalMode);
+    ethicalModeSelector.style('font-family', 'sans-serif');
+    ethicalModeSelector.style('color', 'white');
 
     // Slider to control the speed of the scenaro
     speedSlider = createSlider(0, 100, 2);
@@ -55,22 +63,22 @@ function setup() {
 
     // Button to save out data
     saveDataBtn = createButton("Save data");
-    saveDataBtn.position(MAP_SIZE_X-200, 155);
+    //saveDataBtn.position(MAP_SIZE_X-200, 180);
     saveDataBtn.mousePressed(saveData);
 
     // Button to save car
     saveCarBtn = createButton("Save highlighted car");
-    saveCarBtn.position(MAP_SIZE_X-200, 180);
+    //saveCarBtn.position(MAP_SIZE_X-200, 205);
     saveCarBtn.mousePressed(saveCar);
 
     // Button to load car
     loadCarBtn = createButton("Add saved car");
-    loadCarBtn.position(MAP_SIZE_X-200, 205);
+    //loadCarBtn.position(MAP_SIZE_X-200, 230);
     loadCarBtn.mousePressed(loadSavedCar);
 
     // Button to start the next generation
     nextGenBtn = createButton("Next generation");
-    nextGenBtn.position(MAP_SIZE_X-200, 230);
+    //nextGenBtn.position(MAP_SIZE_X-200, 255);
     nextGenBtn.mousePressed(endCurrentGeneration);
 
     loadMap('A');
@@ -195,6 +203,17 @@ function loadSavedCar() {
     })()
 }
 
+function toggleAutoMap() {
+    if (autoMapSelector.checked()) {
+        autoMapChanging = false;
+        mapSelector.removeAttribute('disabled');
+    }
+    else {
+        autoMapChanging = true;
+        mapSelector.disable();
+    }
+}
+
 function toggleEthicalMode() {
     if (ethicalModeSelector.checked()) {
         ethicalMode = false;
@@ -259,10 +278,18 @@ function loadMap(mapID) {
     mapSelector.position(MAP_SIZE_X-200, 50);
     populationDisplaySelector.position(MAP_SIZE_X-200, 75);
     sensorDisplaySelector.position(MAP_SIZE_X-200, 100);
-    // ethicalModeSelector.position(MAP_SIZE_X-200, 125);
+    autoMapSelector.position(MAP_SIZE_X-200, 125);
+    // ethicalModeSelector.position(MAP_SIZE_X-200, 150);
     speedSlider.position(50, MAP_SIZE_Y-50);
-    saveDataBtn.position(MAP_SIZE_X-200, 155);
-    saveCarBtn.position(MAP_SIZE_X-200, 180);
-    loadCarBtn.position(MAP_SIZE_X-200, 205);
-    nextGenBtn.position(MAP_SIZE_X-200, 230);
+    saveDataBtn.position(MAP_SIZE_X-200, 180);
+    saveCarBtn.position(MAP_SIZE_X-200, 205);
+    loadCarBtn.position(MAP_SIZE_X-200, 230);
+    nextGenBtn.position(MAP_SIZE_X-200, 255);
+}
+function autoChangeMap() {
+    if(autoChangeMap) {
+        randomMap = maps[Math.floor(Math.random() * maps.length)];
+        loadMap(randomMap);
+        mapSelector.selected(randomMap);
+    }
 }

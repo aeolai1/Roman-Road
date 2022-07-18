@@ -8,10 +8,13 @@ data.push('Generation, Individual, Reached Target, Time, Task Fitness, Ethical F
 // picks a member of the population to carry forward,
 // and cleans up after the previous generation
 function nextGeneration() {
+
     destination = createVector(DESTINATION_X, DESTINATION_Y);
     calculateFitness(destination);
 
-    // Creates the next generation
+    autoChangeMap();
+
+    // Create the next generation
     for (let i = 0; i < POPULATION_SIZE; i++) {
       alivePopulation[i] = selection();
     }
