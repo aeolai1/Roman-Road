@@ -13,12 +13,12 @@ class Sensor {
         this.direction.normalize();
     }
 
-    show() {
+    show() {  
+        push();
             stroke(255, 100);
-            push();
             translate(this.position.x, this.position.y);
             line(0, 0, this.direction.x * 10, this.direction.y * 10);
-            pop();
+        pop();
     }
 
     // Detect the intersection of the sensor beam and the boundary line

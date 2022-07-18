@@ -42,7 +42,7 @@ function setup() {
     sensorDisplaySelector.style('font-family', 'sans-serif');
     sensorDisplaySelector.style('color', 'white')
 
-        // // Selector to enable ethical mode
+    // // Selector to enable ethical mode
     // ethicalModeSelector = createCheckbox(" Ethical mode");
     // ethicalModeSelector.position(MAP_SIZE_X-200, 125);
     // ethicalModeSelector.mousePressed(toggleEthicalMode);
@@ -108,10 +108,8 @@ function draw() {
     }
     rectMode(CORNER);
     for (let boundary of boundaries) {
-        push()
             stroke(255);
             boundary.show();
-        pop()
     }
 
     if(finishLine) {
